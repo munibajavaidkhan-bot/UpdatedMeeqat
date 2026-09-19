@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" rx="16" fill="#f0fdf4"/>
+  <rect x="1" y="1" width="398" height="298" rx="15" stroke="#bbf7d0" stroke-width="2"/>
+  <text x="200" y="35" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#065f46">Ihram Garments for Women</text>
+  <!-- Person with Abaya -->
+  <circle cx="180" cy="80" r="18" fill="#d4a574"/>
+  <!-- Hijab -->
+  <path d="M162 75 Q180 65 198 75 L198 95 Q180 105 162 95Z" fill="#1e293b"/>
+  <!-- Abaya -->
+  <path d="M155 98 L145 220 Q145 230 155 230 L205 230 Q215 230 215 220 L205 98 Q205 90 195 90 L165 90 Q155 90 155 98Z" fill="#1e293b" stroke="#0f172a" stroke-width="1"/>
+  <!-- Face visible -->
+  <rect x="168" y="78" width="24" height="18" rx="10" fill="#d4a574"/>
+  <!-- Labels -->
+  <line x1="215" y1="80" x2="270" y2="65" stroke="#059669" stroke-width="1.5"/>
+  <rect x="270" y="55" width="100" height="22" rx="4" fill="white" stroke="#059669" stroke-width="1.5"/>
+  <text x="320" y="70" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#065f46">Face Visible</text>
+  <line x1="215" y1="160" x2="270" y2="150" stroke="#059669" stroke-width="1.5"/>
+  <rect x="270" y="140" width="100" height="22" rx="4" fill="white" stroke="#059669" stroke-width="1.5"/>
+  <text x="320" y="155" text-anchor="middle" font-family="Arial" font-size="10" font-weight="bold" fill="#065f46">Full Abaya</text>
+  <!-- Notes -->
+  <rect x="60" y="245" width="280" height="35" rx="8" fill="#dcfce7"/>
+  <text x="200" y="260" text-anchor="middle" font-family="Arial" font-size="10" fill="#065f46">Any modest, loose-fitting clothes</text>
+  <text x="200" y="273" text-anchor="middle" font-family="Arial" font-size="9" fill="#059669">White preferred but not mandatory</text>
+</svg>

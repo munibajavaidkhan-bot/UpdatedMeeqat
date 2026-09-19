@@ -1,0 +1,1334 @@
+
+==================================================
+=== FILE: \resources\views\admin\analytics.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Analytics')
+@section('page_title', 'Analytics & Reports')
+
+@section('content')
+
+{{-- Stats --}}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+    @foreach([
+        ['Total Users',    $stats['total_users'],    '👥', 'primary'],
+        ['Total Calcs',    $stats['total_calcs'],    '📏', 'blue'],
+        ['Total Searches', $stats['total_searches'], '📍', 'purple'],
+        ['Calcs/Month',    $stats['calcs_month'],    '📊', 'gold'],
+        ['Searches/Month', $stats['searches_month'], '🔍', 'green'],
+    ] as $s)
+        <div class="card p-5 text-center">
+            <div class="text-3xl mb-2">{{ $s[2] }}</div>
+            <p class="text-2xl font-black text-white">{{ number_format($s[1]) }}</p>
+            <p class="text-dark-500 text-xs mt-1">{{ $s[0] }}</p>
+        </div>
+    @endforeach
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+    {{-- Chaddar Style Stats --}}
+    <div class="card-premium p-6">
+        <h3 class="text-white font-bold mb-5">📏 Chaddar Style Usage</h3>
+        @php $total = $styleStats->sum(); @endphp
+        @foreach($styleStats as $style => $count)
+            <div class="mb-4">
+                <div class="flex justify-between mb-1.5">
+                    <span class="text-dark-300 text-sm capitalize">{{ $style }} Style</span>
+                    <span class="text-white font-bold text-sm">{{ $count }}</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ $total > 0 ? ($count/$total)*100 : 0 }}%"></div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+
+    {{-- Top Countries --}}
+    <div class="card-premium p-6">
+        <h3 class="text-white font-bold mb-5">🌍 Top Countries (Meeqat Searches)</h3>
+        <div class="space-y-3">
+            @foreach($topCountries as $index => $country)
+                <div class="flex items-center gap-3">
+                    <span class="text-dark-500 text-sm w-5 font-bold">{{ $index + 1 }}</span>
+                    <div class="flex-1">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-dark-300 text-sm">{{ $country->user_country }}</span>
+                            <span class="text-white font-bold text-sm">{{ $country->total }}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="h-1.5 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"
+                                 style="width: {{ $topCountries->first()->total > 0 ? ($country->total/$topCountries->first()->total)*100 : 0 }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+{{-- Activity Log --}}
+<div class="card-premium overflow-hidden">
+    <div class="p-5 border-b border-dark-800">
+        <h3 class="text-white font-bold">📋 Recent Activity Logs</h3>
+    </div>
+    <table class="table-premium">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Action</th>
+                <th>Module</th>
+                <th>IP</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($recentLogs as $log)
+                <tr>
+                    <td class="text-dark-200 text-sm">{{ $log->user?->name ?? 'Guest' }}</td>
+                    <td><span class="badge-green text-xs">{{ str_replace('_', ' ', $log->action) }}</span></td>
+                    <td class="text-dark-400 text-sm">{{ $log->module }}</td>
+                    <td class="text-dark-600 text-xs font-mono">{{ $log->ip_address }}</td>
+                    <td class="text-dark-500 text-xs">{{ $log->created_at->diffForHumans() }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\dashboard.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Dashboard')
+@section('page_title', 'Dashboard')
+@section('page_subtitle', 'Welcome back, ' . auth()->user()->name)
+
+@section('content')
+
+{{-- Stats Cards --}}
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+    @php
+    $statCards = [
+        ['label' => 'Total Users',       'value' => $stats['total_users'],          'icon' => '👥', 'sub' => '+' . $stats['new_users_today'] . ' today',     'color' => 'from-primary-500/20 to-primary-600/10 border-primary-500/20'],
+        ['label' => 'Total Duas',        'value' => $stats['total_duas'],           'icon' => '🤲', 'sub' => $stats['total_niyat'] . ' niyat also',           'color' => 'from-gold-500/20 to-gold-600/10 border-gold-500/20'],
+        ['label' => 'Chaddar Calcs',     'value' => $stats['chaddar_calculations'], 'icon' => '📏', 'sub' => '+' . $stats['calcs_today'] . ' today',          'color' => 'from-blue-500/20 to-blue-600/10 border-blue-500/20'],
+        ['label' => 'Meeqat Searches',   'value' => $stats['meeqat_searches'],      'icon' => '📍', 'sub' => '+' . $stats['searches_today'] . ' today',       'color' => 'from-purple-500/20 to-purple-600/10 border-purple-500/20'],
+    ];
+    @endphp
+
+    @foreach($statCards as $card)
+        <div class="card overflow-hidden bg-gradient-to-br {{ $card['color'] }} border">
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="text-3xl">{{ $card['icon'] }}</div>
+                    <span class="badge-green text-xs">Live</span>
+                </div>
+                <p class="text-3xl font-black text-white mb-1">{{ number_format($card['value']) }}</p>
+                <p class="text-dark-400 text-sm font-medium">{{ $card['label'] }}</p>
+                <p class="text-dark-600 text-xs mt-1">{{ $card['sub'] }}</p>
+            </div>
+        </div>
+    @endforeach
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    {{-- Recent Users --}}
+    <div class="lg:col-span-2 card-premium">
+        <div class="p-5 border-b border-dark-800 flex items-center justify-between">
+            <h3 class="text-white font-bold">👥 Recent Users</h3>
+            <a href="{{ route('admin.users.index') }}" class="text-primary-400 text-sm hover:underline">View All →</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="table-premium">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Country</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($recentUsers as $user)
+                        <tr>
+                            <td>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-xs font-bold">
+                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                    </div>
+                                    <div>
+                                        <p class="text-white text-sm font-medium">{{ $user->name }}</p>
+                                        <p class="text-dark-500 text-xs">{{ $user->email }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge-green text-xs">{{ $user->role?->label }}</span></td>
+                            <td class="text-dark-400 text-sm">{{ $user->country ?? '—' }}</td>
+                            <td>
+                                @if($user->is_active)
+                                    <span class="badge-green text-xs">Active</span>
+                                @else
+                                    <span class="badge-red text-xs">Inactive</span>
+                                @endif
+                            </td>
+                            <td class="text-dark-500 text-xs">{{ $user->created_at->diffForHumans() }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{-- Quick Actions --}}
+    <div class="card-premium p-6">
+        <h3 class="text-white font-bold mb-5">⚡ Quick Actions</h3>
+        <div class="space-y-3">
+            @foreach([
+                ['route' => 'admin.duas.create',         'icon' => '🤲', 'label' => 'Add New Dua',           'color' => 'primary'],
+                ['route' => 'admin.niyat.create',        'icon' => '📿', 'label' => 'Add New Niyat',         'color' => 'gold'],
+                ['route' => 'admin.ihram-guides.create', 'icon' => '📖', 'label' => 'Add Ihram Guide',       'color' => 'blue'],
+                ['route' => 'admin.categories.index',    'icon' => '🏷️', 'label' => 'Manage Categories',    'color' => 'purple'],
+                ['route' => 'admin.messages.index',      'icon' => '✉️', 'label' => 'View Messages',        'color' => 'green'],
+                ['route' => 'admin.settings',            'icon' => '⚙️', 'label' => 'Site Settings',        'color' => 'orange'],
+            ] as $action)
+                <a href="{{ route($action['route']) }}"
+                   class="flex items-center gap-3 p-3 rounded-xl bg-dark-800 hover:bg-dark-700 border border-dark-700 hover:border-dark-600 transition-all duration-200 group">
+                    <span class="text-xl">{{ $action['icon'] }}</span>
+                    <span class="text-dark-300 group-hover:text-white text-sm font-medium transition-colors">{{ $action['label'] }}</span>
+                    <svg class="w-4 h-4 text-dark-600 group-hover:text-primary-400 ml-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            @endforeach
+        </div>
+    </div>
+
+    {{-- Recent Activity --}}
+    <div class="lg:col-span-3 card-premium">
+        <div class="p-5 border-b border-dark-800">
+            <h3 class="text-white font-bold">📊 Recent Activity</h3>
+        </div>
+        <div class="p-5 space-y-3">
+            @foreach($recentActivity as $log)
+                <div class="flex items-start gap-4 p-3 rounded-xl hover:bg-dark-800 transition-colors">
+                    <div class="w-8 h-8 rounded-lg bg-dark-800 border border-dark-700 flex items-center justify-center text-sm flex-shrink-0">
+                        {{ match($log->module) { 'chaddar_calculator' => '📏', 'meeqat_finder' => '📍', default => '📋' } }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-dark-200 text-sm">
+                            <span class="text-white font-medium">{{ $log->user?->name ?? 'Guest' }}</span>
+                            — {{ str_replace('_', ' ', $log->action) }}
+                        </p>
+                        <p class="text-dark-600 text-xs mt-0.5">{{ $log->created_at->diffForHumans() }} • {{ $log->ip_address }}</p>
+                    </div>
+                    <span class="badge bg-dark-800 border border-dark-700 text-dark-400 text-xs flex-shrink-0">{{ $log->module }}</span>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\settings.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Settings')
+@section('page_title', 'Site Settings')
+
+@section('content')
+<div class="max-w-3xl">
+    <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <div class="space-y-6">
+            @foreach($settings as $group => $groupSettings)
+                <div class="card-premium overflow-hidden">
+                    <div class="px-6 py-4 border-b border-dark-800 bg-dark-800/30">
+                        <h3 class="text-white font-bold capitalize">{{ $group }} Settings</h3>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        @foreach($groupSettings as $setting)
+                            <div class="grid grid-cols-3 gap-4 items-center">
+                                <label class="text-dark-300 text-sm font-medium">
+                                    {{ $setting->label ?? $setting->key }}
+                                </label>
+                                <div class="col-span-2">
+                                    @if($setting->type === 'boolean')
+                                        <select name="{{ $setting->key }}" class="select-field">
+                                            <option value="1" {{ $setting->value == '1' ? 'selected' : '' }}>Enabled</option>
+                                            <option value="0" {{ $setting->value == '0' ? 'selected' : '' }}>Disabled</option>
+                                        </select>
+                                    @elseif($setting->type === 'image')
+                                        <input type="file" name="{{ $setting->key }}" accept="image/*"
+                                               class="block w-full text-sm text-dark-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-primary-500/20 file:text-primary-400 file:cursor-pointer">
+                                    @else
+                                        <input type="text" name="{{ $setting->key }}"
+                                               value="{{ $setting->value }}"
+                                               class="input-field">
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="mt-6">
+            <button type="submit" class="btn-primary px-8 py-3">💾 Save All Settings</button>
+        </div>
+    </form>
+</div>
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\categories\index.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Categories')
+@section('page_title', 'Dua Categories')
+
+@section('content')
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    {{-- Add Form --}}
+    <div class="card-premium p-6">
+        <h3 class="text-white font-bold mb-5">Add New Category</h3>
+        <form action="{{ route('admin.categories.store') }}" method="POST" class="space-y-4">
+            @csrf
+            <div>
+                <label class="input-label">Name (English) *</label>
+                <input type="text" name="name_en" class="input-field" placeholder="e.g. Tawaf" value="{{ old('name_en') }}">
+            </div>
+            <div>
+                <label class="input-label">Name (Arabic)</label>
+                <input type="text" name="name_ar" class="input-field arabic text-right" dir="rtl" placeholder="طواف" value="{{ old('name_ar') }}">
+            </div>
+            <div>
+                <label class="input-label">Icon (Emoji)</label>
+                <input type="text" name="icon" class="input-field" placeholder="🕋" value="{{ old('icon') }}">
+            </div>
+            <button type="submit" class="btn-primary w-full">Add Category</button>
+        </form>
+    </div>
+
+    {{-- Categories List --}}
+    <div class="lg:col-span-2 card-premium overflow-hidden">
+        <div class="p-5 border-b border-dark-800">
+            <h3 class="text-white font-bold">All Categories ({{ $categories->count() }})</h3>
+        </div>
+        <table class="table-premium">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Arabic</th>
+                    <th>Duas</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($categories as $cat)
+                    <tr>
+                        <td>
+                            <span class="text-xl mr-2">{{ $cat->icon }}</span>
+                            <span class="text-white font-medium">{{ $cat->name_en }}</span>
+                        </td>
+                        <td class="arabic text-gold-400">{{ $cat->name_ar }}</td>
+                        <td><span class="badge-green text-xs">{{ $cat->duas_count }}</span></td>
+                        <td>
+                            <form action="{{ route('admin.categories.destroy', $cat) }}" method="POST"
+                                  onsubmit="return confirm('Delete category?')">
+                                @csrf @method('DELETE')
+                                <button type="submit"
+                                        class="p-1.5 rounded-lg bg-dark-700 hover:bg-red-500/20 text-dark-400 hover:text-red-400 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\duas\create.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', isset($dua) ? 'Edit Dua' : 'Add Dua')
+@section('page_title', isset($dua) ? 'Edit Dua' : 'Add New Dua')
+
+@section('content')
+<div class="max-w-4xl">
+    <div class="card-premium p-8">
+        <form action="{{ isset($dua) ? route('admin.duas.update', $dua) : route('admin.duas.store') }}"
+              method="POST">
+            @csrf
+            @if(isset($dua)) @method('PUT') @endif
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                <div>
+                    <label class="input-label">Category <span class="text-red-400">*</span></label>
+                    <select name="category_id" class="select-field">
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->id }}" {{ old('category_id', $dua->category_id ?? '') == $cat->id ? 'selected' : '' }}>
+                                {{ $cat->icon }} {{ $cat->name_en }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="input-label">Title (English) <span class="text-red-400">*</span></label>
+                    <input type="text" name="title_en" class="input-field" placeholder="Dua title..."
+                           value="{{ old('title_en', $dua->title_en ?? '') }}">
+                    @error('title_en') <p class="input-error">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <label class="input-label">Arabic Text <span class="text-red-400">*</span></label>
+                <textarea name="arabic_text" rows="4"
+                          class="input-field arabic text-right text-xl leading-loose"
+                          dir="rtl" placeholder="عربی متن یہاں لکھیں...">{{ old('arabic_text', $dua->arabic_text ?? '') }}</textarea>
+                @error('arabic_text') <p class="input-error">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="mb-5">
+                <label class="input-label">Transliteration (Roman)</label>
+                <textarea name="transliteration" rows="3" class="input-field"
+                          placeholder="e.g. Rabbana atina fid-dunya hasanatan...">{{ old('transliteration', $dua->transliteration ?? '') }}</textarea>
+            </div>
+
+            <div class="mb-5">
+                <label class="input-label">Translation (English)</label>
+                <textarea name="translation_en" rows="3" class="input-field"
+                          placeholder="English translation...">{{ old('translation_en', $dua->translation_en ?? '') }}</textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+                <div>
+                    <label class="input-label">Reference (Quran/Hadith)</label>
+                    <input type="text" name="reference" class="input-field" placeholder="e.g. Quran 2:201"
+                           value="{{ old('reference', $dua->reference ?? '') }}">
+                </div>
+                <div class="flex items-end gap-6">
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="hidden" name="is_featured" value="0">
+                        <input type="checkbox" name="is_featured" value="1" class="w-5 h-5 rounded"
+                               {{ old('is_featured', $dua->is_featured ?? false) ? 'checked' : '' }}>
+                        <span class="text-dark-300 font-medium">⭐ Featured</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="hidden" name="is_active" value="0">
+                        <input type="checkbox" name="is_active" value="1" class="w-5 h-5 rounded"
+                               {{ old('is_active', $dua->is_active ?? true) ? 'checked' : '' }}>
+                        <span class="text-dark-300 font-medium">✅ Active</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit" class="btn-primary">{{ isset($dua) ? 'Update Dua' : 'Create Dua' }}</button>
+                <a href="{{ route('admin.duas.index') }}" class="btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\duas\edit.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Edit Dua')
+@section('page_title', 'Edit Dua')
+
+@section('content')
+@include('admin.duas.create')
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\duas\index.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Manage Duas')
+@section('page_title', 'Duas Library')
+
+@section('content')
+
+<div class="flex justify-between items-center mb-6">
+    <div class="flex gap-3">
+        <form action="{{ route('admin.duas.index') }}" method="GET" class="flex gap-3">
+            <input type="text" name="search" placeholder="Search duas..." class="input-field w-64" value="{{ request('search') }}">
+            <select name="category" class="select-field w-40">
+                <option value="">All Categories</option>
+                @foreach($categories as $cat)
+                    <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>{{ $cat->name_en }}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="btn-primary text-sm py-2.5 px-4">Filter</button>
+        </form>
+    </div>
+    <a href="{{ route('admin.duas.create') }}" class="btn-primary text-sm">
+        + Add New Dua
+    </a>
+</div>
+
+<div class="card-premium overflow-hidden">
+    <table class="table-premium">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Arabic Preview</th>
+                <th>Featured</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($duas as $dua)
+                <tr>
+                    <td class="text-dark-500 text-xs">{{ $dua->id }}</td>
+                    <td class="text-white font-medium max-w-xs">{{ Str::limit($dua->title_en, 40) }}</td>
+                    <td><span class="badge-green text-xs">{{ $dua->category->name_en }}</span></td>
+                    <td class="arabic text-gold-400 text-sm max-w-xs">{{ Str::limit($dua->arabic_text, 30) }}</td>
+                    <td>
+                        @if($dua->is_featured)
+                            <span class="badge-gold text-xs">⭐ Yes</span>
+                        @else
+                            <span class="text-dark-600 text-xs">—</span>
+                        @endif
+                    </td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="{{ route('admin.duas.edit', $dua) }}"
+                               class="p-1.5 rounded-lg bg-dark-700 hover:bg-primary-500/20 text-dark-400 hover:text-primary-400 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            </a>
+                            <form action="{{ route('admin.duas.destroy', $dua) }}" method="POST"
+                                  onsubmit="return confirm('Delete this dua?')">
+                                @csrf @method('DELETE')
+                                <button type="submit"
+                                        class="p-1.5 rounded-lg bg-dark-700 hover:bg-red-500/20 text-dark-400 hover:text-red-400 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <div class="p-5 border-t border-dark-800">{{ $duas->links() }}</div>
+</div>
+
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\ihram-guides\create.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', isset($ihramGuide) ? 'Edit Guide' : 'Add Guide')
+@section('page_title', isset($ihramGuide) ? 'Edit Ihram Guide' : 'Add New Ihram Guide')
+
+@section('content')
+<div class="max-w-4xl">
+    <div class="card-premium p-8">
+        <form action="{{ isset($ihramGuide) ? route('admin.ihram-guides.update', $ihramGuide) : route('admin.ihram-guides.store') }}"
+              method="POST" enctype="multipart/form-data">
+            @csrf
+            @if(isset($ihramGuide)) @method('PUT') @endif
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-5">
+                <div>
+                    <label class="input-label">Category <span class="text-red-400">*</span></label>
+                    <select name="category" class="select-field">
+                        @foreach(['general' => '📋 General', 'men' => '👨 Men', 'women' => '👩 Women', 'prohibited' => '🚫 Prohibited', 'recommended' => '⭐ Recommended'] as $val => $label)
+                            <option value="{{ $val }}" {{ old('category', $ihramGuide->category ?? '') === $val ? 'selected' : '' }}>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="input-label">Icon (Emoji)</label>
+                    <input type="text" name="icon" class="input-field" placeholder="🕌"
+                           value="{{ old('icon', $ihramGuide->icon ?? '') }}">
+                </div>
+                <div>
+                    <label class="input-label">Sort Order</label>
+                    <input type="number" name="sort_order" class="input-field"
+                           value="{{ old('sort_order', $ihramGuide->sort_order ?? 0) }}">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                <div>
+                    <label class="input-label">Title (English) <span class="text-red-400">*</span></label>
+                    <input type="text" name="title_en" class="input-field"
+                           value="{{ old('title_en', $ihramGuide->title_en ?? '') }}">
+                </div>
+                <div>
+                    <label class="input-label">Title (Urdu)</label>
+                    <input type="text" name="title_ur" class="input-field urdu text-right" dir="rtl"
+                           value="{{ old('title_ur', $ihramGuide->title_ur ?? '') }}">
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <label class="input-label">Content (English)</label>
+                <textarea name="content_en" rows="4" class="input-field"
+                          placeholder="Detailed description in English...">{{ old('content_en', $ihramGuide->content_en ?? '') }}</textarea>
+            </div>
+
+            <div class="mb-5">
+                <label class="input-label">Content (Urdu)</label>
+                <textarea name="content_ur" rows="4" class="input-field urdu text-right leading-loose"
+                          dir="rtl" placeholder="تفصیل اردو میں...">{{ old('content_ur', $ihramGuide->content_ur ?? '') }}</textarea>
+            </div>
+
+            <div class="mb-6">
+                <label class="input-label">Guide Image (Optional)</label>
+                @if(isset($ihramGuide) && $ihramGuide->image)
+                    <div class="mb-3">
+                        <img src="{{ Storage::url($ihramGuide->image) }}" class="h-32 rounded-xl object-cover" alt="Current image">
+                        <p class="text-dark-500 text-xs mt-1">Current image — upload new to replace</p>
+                    </div>
+                @endif
+                <input type="file" name="image" accept="image/*"
+                       class="block w-full text-sm text-dark-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:bg-primary-500/20 file:text-primary-400 hover:file:bg-primary-500/30 file:cursor-pointer cursor-pointer">
+                <p class="text-dark-500 text-xs mt-1.5">Recommended: 800×400px, max 2MB</p>
+            </div>
+
+            <div class="flex items-center gap-5 mb-6">
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input type="hidden" name="is_active" value="0">
+                    <input type="checkbox" name="is_active" value="1" class="w-5 h-5 rounded"
+                           {{ old('is_active', $ihramGuide->is_active ?? true) ? 'checked' : '' }}>
+                    <span class="text-dark-300 font-medium">✅ Active</span>
+                </label>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit" class="btn-primary">{{ isset($ihramGuide) ? 'Update Guide' : 'Create Guide' }}</button>
+                <a href="{{ route('admin.ihram-guides.index') }}" class="btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\ihram-guides\edit.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Edit Ihram Guide')
+@section('page_title', 'Edit Ihram Guide')
+
+@section('content')
+@include('admin.ihram-guides.create')
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\ihram-guides\index.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Ihram Guides')
+@section('page_title', 'Ihram Guides')
+
+@section('content')
+
+<div class="flex justify-end mb-6">
+    <a href="{{ route('admin.ihram-guides.create') }}" class="btn-primary text-sm">+ Add New Guide</a>
+</div>
+
+<div class="card-premium overflow-hidden">
+    <table class="table-premium">
+        <thead>
+            <tr>
+                <th>Guide</th>
+                <th>Category</th>
+                <th>Urdu Title</th>
+                <th>Order</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($guides as $guide)
+                <tr>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">{{ $guide->icon }}</span>
+                            <p class="text-white font-medium text-sm">{{ Str::limit($guide->title_en, 35) }}</p>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge border {{ $guide->category_color }} text-xs">
+                            {{ $guide->category_label }}
+                        </span>
+                    </td>
+                    <td class="urdu text-dark-400 text-sm">{{ Str::limit($guide->title_ur, 25) ?? '—' }}</td>
+                    <td class="text-dark-400 text-sm">{{ $guide->sort_order }}</td>
+                    <td>
+                        @if($guide->is_active)
+                            <span class="badge-green text-xs">Active</span>
+                        @else
+                            <span class="badge-red text-xs">Inactive</span>
+                        @endif
+                    </td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="{{ route('admin.ihram-guides.edit', $guide) }}"
+                               class="p-1.5 rounded-lg bg-dark-700 hover:bg-primary-500/20 text-dark-400 hover:text-primary-400 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            </a>
+                            <form action="{{ route('admin.ihram-guides.destroy', $guide) }}" method="POST"
+                                  onsubmit="return confirm('Delete?')">
+                                @csrf @method('DELETE')
+                                <button type="submit"
+                                        class="p-1.5 rounded-lg bg-dark-700 hover:bg-red-500/20 text-dark-400 hover:text-red-400 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <div class="p-5 border-t border-dark-800">{{ $guides->links() }}</div>
+</div>
+
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\meeqat-locations\create.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', isset($meeqatLocation) ? 'Edit Location' : 'Add Location')
+@section('page_title', isset($meeqatLocation) ? 'Edit Meeqat Location' : 'Add Meeqat Location')
+
+@section('content')
+<div class="max-w-2xl">
+    <div class="card-premium p-8">
+        <form action="{{ isset($meeqatLocation) ? route('admin.meeqat-locations.update', $meeqatLocation) : route('admin.meeqat-locations.store') }}"
+              method="POST">
+            @csrf
+            @if(isset($meeqatLocation)) @method('PUT') @endif
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                <div>
+                    <label class="input-label">Name (English) *</label>
+                    <input type="text" name="name_en" class="input-field"
+                           value="{{ old('name_en', $meeqatLocation->name_en ?? '') }}">
+                </div>
+                <div>
+                    <label class="input-label">Name (Arabic) *</label>
+                    <input type="text" name="name_ar" class="input-field arabic text-right" dir="rtl"
+                           value="{{ old('name_ar', $meeqatLocation->name_ar ?? '') }}">
+                </div>
+                <div>
+                    <label class="input-label">Name (Urdu)</label>
+                    <input type="text" name="name_ur" class="input-field"
+                           value="{{ old('name_ur', $meeqatLocation->name_ur ?? '') }}">
+                </div>
+                <div>
+                    <label class="input-label">Icon (Emoji)</label>
+                    <input type="text" name="icon" class="input-field"
+                           value="{{ old('icon', $meeqatLocation->icon ?? '📍') }}">
+                </div>
+                <div>
+                    <label class="input-label">Latitude *</label>
+                    <input type="number" name="latitude" step="0.00000001" class="input-field"
+                           value="{{ old('latitude', $meeqatLocation->latitude ?? '') }}">
+                </div>
+                <div>
+                    <label class="input-label">Longitude *</label>
+                    <input type="number" name="longitude" step="0.00000001" class="input-field"
+                           value="{{ old('longitude', $meeqatLocation->longitude ?? '') }}">
+                </div>
+                <div>
+                    <label class="input-label">Sort Order</label>
+                    <input type="number" name="sort_order" class="input-field"
+                           value="{{ old('sort_order', $meeqatLocation->sort_order ?? 0) }}">
+                </div>
+                <div>
+                    <label class="input-label">Color (hex)</label>
+                    <input type="text" name="color" class="input-field" placeholder="#22c55e"
+                           value="{{ old('color', $meeqatLocation->color ?? '#22c55e') }}">
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <label class="input-label">For Pilgrims From</label>
+                <input type="text" name="for_pilgrims_from" class="input-field"
+                       placeholder="e.g. Pakistan, India, Turkey..."
+                       value="{{ old('for_pilgrims_from', $meeqatLocation->for_pilgrims_from ?? '') }}">
+            </div>
+
+            <div class="mb-5">
+                <label class="input-label">Description</label>
+                <textarea name="description" rows="3" class="input-field">{{ old('description', $meeqatLocation->description ?? '') }}</textarea>
+            </div>
+
+            <div class="flex items-center gap-4 mb-6">
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input type="hidden" name="is_active" value="0">
+                    <input type="checkbox" name="is_active" value="1" class="w-5 h-5 rounded"
+                           {{ old('is_active', $meeqatLocation->is_active ?? true) ? 'checked' : '' }}>
+                    <span class="text-dark-300 font-medium">✅ Active</span>
+                </label>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit" class="btn-primary">
+                    {{ isset($meeqatLocation) ? 'Update Location' : 'Create Location' }}
+                </button>
+                <a href="{{ route('admin.meeqat-locations.index') }}" class="btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\meeqat-locations\edit.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Edit Location')
+@section('page_title', 'Edit Meeqat Location')
+
+@section('content')
+@include('admin.meeqat-locations.create')
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\meeqat-locations\index.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Meeqat Locations')
+@section('page_title', 'Meeqat Locations')
+
+@section('content')
+
+<div class="flex justify-end mb-6">
+    <a href="{{ route('admin.meeqat-locations.create') }}" class="btn-primary text-sm">+ Add Location</a>
+</div>
+
+<div class="card-premium overflow-hidden">
+    <table class="table-premium">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Arabic</th>
+                <th>Coordinates</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($locations as $loc)
+                <tr>
+                    <td class="text-dark-500">{{ $loc->sort_order }}</td>
+                    <td>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">{{ $loc->icon }}</span>
+                            <span class="text-white font-medium text-sm">{{ $loc->name_en }}</span>
+                        </div>
+                    </td>
+                    <td class="arabic text-gold-400">{{ $loc->name_ar }}</td>
+                    <td class="font-mono text-dark-400 text-xs">
+                        {{ $loc->latitude }}, {{ $loc->longitude }}
+                    </td>
+                    <td>
+                        @if($loc->is_active)
+                            <span class="badge-green text-xs">Active</span>
+                        @else
+                            <span class="badge-red text-xs">Inactive</span>
+                        @endif
+                    </td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="{{ route('admin.meeqat-locations.edit', $loc) }}"
+                               class="p-1.5 rounded-lg bg-dark-700 hover:bg-primary-500/20 text-dark-400 hover:text-primary-400 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            </a>
+                            <form action="{{ route('admin.meeqat-locations.destroy', $loc) }}" method="POST"
+                                  onsubmit="return confirm('Delete?')">
+                                @csrf @method('DELETE')
+                                <button type="submit"
+                                        class="p-1.5 rounded-lg bg-dark-700 hover:bg-red-500/20 text-dark-400 hover:text-red-400 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\messages\index.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Messages')
+@section('page_title', 'Contact Messages')
+
+@section('content')
+
+@if($unread > 0)
+    <div class="alert-warning mb-6">
+        <span class="text-xl">📬</span>
+        <p>Aapke paas <strong>{{ $unread }}</strong> unread messages hain!</p>
+    </div>
+@endif
+
+<div class="card-premium overflow-hidden">
+    <table class="table-premium">
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($messages as $msg)
+                <tr class="{{ !$msg->is_read ? 'bg-primary-500/5' : '' }}">
+                    <td>
+                        <div>
+                            <p class="text-white text-sm font-medium {{ !$msg->is_read ? 'font-bold' : '' }}">{{ $msg->name }}</p>
+                            <p class="text-dark-500 text-xs">{{ $msg->email }}</p>
+                        </div>
+                    </td>
+                    <td class="text-dark-300 text-sm">{{ Str::limit($msg->subject, 30) ?? '—' }}</td>
+                    <td class="text-dark-500 text-sm">{{ Str::limit($msg->message, 40) }}</td>
+                    <td class="text-dark-500 text-xs">{{ $msg->created_at->format('M d, Y') }}</td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="{{ route('admin.messages.show', $msg->id) }}"
+                               class="p-1.5 rounded-lg bg-dark-700 hover:bg-primary-500/20 text-dark-400 hover:text-primary-400 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </a>
+                            <form action="{{ route('admin.messages.destroy', $msg->id) }}" method="POST"
+                                  onsubmit="return confirm('Delete?')">
+                                @csrf @method('DELETE')
+                                <button type="submit"
+                                        class="p-1.5 rounded-lg bg-dark-700 hover:bg-red-500/20 text-dark-400 hover:text-red-400 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <div class="p-5 border-t border-dark-800">{{ $messages->links() }}</div>
+</div>
+
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\messages\show.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'View Message')
+@section('page_title', 'Message Detail')
+
+@section('content')
+<div class="max-w-2xl">
+    <a href="{{ route('admin.messages.index') }}" class="inline-flex items-center gap-2 text-dark-400 hover:text-primary-400 text-sm mb-6 transition-colors">
+        ← Back to Messages
+    </a>
+
+    <div class="card-premium p-8">
+        <div class="flex items-start justify-between mb-6">
+            <div>
+                <h2 class="text-xl font-bold text-white">{{ $message->subject ?? 'No Subject' }}</h2>
+                <p class="text-dark-400 text-sm mt-1">{{ $message->created_at->format('F d, Y — h:i A') }}</p>
+            </div>
+            <span class="badge-green text-xs">Read</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="card p-4">
+                <p class="text-dark-500 text-xs mb-1">Name</p>
+                <p class="text-white font-semibold">{{ $message->name }}</p>
+            </div>
+            <div class="card p-4">
+                <p class="text-dark-500 text-xs mb-1">Email</p>
+                <a href="mailto:{{ $message->email }}" class="text-primary-400 font-semibold hover:underline">{{ $message->email }}</a>
+            </div>
+            @if($message->phone)
+                <div class="card p-4 col-span-2">
+                    <p class="text-dark-500 text-xs mb-1">Phone</p>
+                    <p class="text-white">{{ $message->phone }}</p>
+                </div>
+            @endif
+        </div>
+
+        <div class="card p-5">
+            <p class="text-dark-500 text-xs mb-3 uppercase tracking-wider">Message</p>
+            <p class="text-dark-200 leading-relaxed">{{ $message->message }}</p>
+        </div>
+
+        <div class="flex gap-3 mt-6">
+            <a href="mailto:{{ $message->email }}" class="btn-primary text-sm">Reply via Email</a>
+            <form action="{{ route('admin.messages.destroy', $message->id) }}" method="POST"
+                  onsubmit="return confirm('Delete message?')">
+                @csrf @method('DELETE')
+                <button type="submit" class="btn-danger text-sm">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\niyat\create.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', isset($niyat) ? 'Edit Niyat' : 'Add Niyat')
+@section('page_title', isset($niyat) ? 'Edit Niyat' : 'Add New Niyat')
+
+@section('content')
+<div class="max-w-4xl">
+    <div class="card-premium p-8">
+        <form action="{{ isset($niyat) ? route('admin.niyat.update', $niyat) : route('admin.niyat.store') }}"
+              method="POST">
+            @csrf
+            @if(isset($niyat)) @method('PUT') @endif
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                <div>
+                    <label class="input-label">Type <span class="text-red-400">*</span></label>
+                    <select name="type" class="select-field">
+                        @foreach(['hajj' => '🕌 Hajj', 'umrah' => '🕋 Umrah', 'tawaf' => '🔄 Tawaf', 'sai' => '⛰️ Sai', 'other' => '📿 Other'] as $val => $label)
+                            <option value="{{ $val }}" {{ old('type', $niyat->type ?? '') === $val ? 'selected' : '' }}>
+                                {{ $label }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="input-label">Title (English) <span class="text-red-400">*</span></label>
+                    <input type="text" name="title_en" class="input-field"
+                           placeholder="e.g. Niyat for Umrah"
+                           value="{{ old('title_en', $niyat->title_en ?? '') }}">
+                    @error('title_en') <p class="input-error">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <label class="input-label">Arabic Text <span class="text-red-400">*</span></label>
+                <textarea name="arabic_text" rows="3"
+                          class="input-field arabic text-right text-xl leading-loose"
+                          dir="rtl"
+                          placeholder="عربی متن یہاں لکھیں...">{{ old('arabic_text', $niyat->arabic_text ?? '') }}</textarea>
+                @error('arabic_text') <p class="input-error">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="mb-5">
+                <label class="input-label">Transliteration (Roman)</label>
+                <textarea name="transliteration" rows="2" class="input-field"
+                          placeholder="e.g. Labbayk Allahumma Umratan...">{{ old('transliteration', $niyat->transliteration ?? '') }}</textarea>
+            </div>
+
+            <div class="mb-5">
+                <label class="input-label">Translation (English)</label>
+                <textarea name="translation_en" rows="2" class="input-field"
+                          placeholder="English translation...">{{ old('translation_en', $niyat->translation_en ?? '') }}</textarea>
+            </div>
+
+            <div class="flex items-center gap-5 mb-6">
+                <label class="flex items-center gap-3 cursor-pointer">
+                    <input type="hidden" name="is_active" value="0">
+                    <input type="checkbox" name="is_active" value="1" class="w-5 h-5 rounded"
+                           {{ old('is_active', $niyat->is_active ?? true) ? 'checked' : '' }}>
+                    <span class="text-dark-300 font-medium">✅ Active</span>
+                </label>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit" class="btn-primary">
+                    {{ isset($niyat) ? 'Update Niyat' : 'Create Niyat' }}
+                </button>
+                <a href="{{ route('admin.niyat.index') }}" class="btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\niyat\edit.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Edit Niyat')
+@section('page_title', 'Edit Niyat')
+
+@section('content')
+@include('admin.niyat.create')
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\niyat\index.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Manage Niyat')
+@section('page_title', 'Niyat Management')
+
+@section('content')
+
+<div class="flex justify-end mb-6">
+    <a href="{{ route('admin.niyat.create') }}" class="btn-primary text-sm">+ Add New Niyat</a>
+</div>
+
+<div class="card-premium overflow-hidden">
+    <table class="table-premium">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Type</th>
+                <th>Arabic Preview</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($niyats as $niyat)
+                <tr>
+                    <td class="text-dark-500 text-xs">{{ $niyat->id }}</td>
+                    <td class="text-white font-medium">{{ Str::limit($niyat->title_en, 40) }}</td>
+                    <td>
+                        <span class="badge-green text-xs capitalize">{{ $niyat->type }}</span>
+                    </td>
+                    <td class="arabic text-gold-400 text-sm">{{ Str::limit($niyat->arabic_text, 30) }}</td>
+                    <td>
+                        @if($niyat->is_active)
+                            <span class="badge-green text-xs">Active</span>
+                        @else
+                            <span class="badge-red text-xs">Inactive</span>
+                        @endif
+                    </td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="{{ route('admin.niyat.edit', $niyat) }}"
+                               class="p-1.5 rounded-lg bg-dark-700 hover:bg-primary-500/20 text-dark-400 hover:text-primary-400 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            </a>
+                            <form action="{{ route('admin.niyat.destroy', $niyat) }}" method="POST"
+                                  onsubmit="return confirm('Delete this niyat?')">
+                                @csrf @method('DELETE')
+                                <button type="submit"
+                                        class="p-1.5 rounded-lg bg-dark-700 hover:bg-red-500/20 text-dark-400 hover:text-red-400 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6" class="text-center py-10 text-dark-500">
+                        Koi niyat nahi mili.
+                        <a href="{{ route('admin.niyat.create') }}" class="text-primary-400 hover:underline ml-1">Add first niyat →</a>
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+    <div class="p-5 border-t border-dark-800">{{ $niyats->links() }}</div>
+</div>
+
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\users\edit.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Edit User')
+@section('page_title', 'Edit User')
+
+@section('content')
+<div class="max-w-2xl">
+    <div class="card-premium p-8">
+        <form action="{{ route('admin.users.update', $user) }}" method="POST">
+            @csrf @method('PUT')
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+                <div>
+                    <label class="input-label">Full Name</label>
+                    <input type="text" name="name" class="input-field @error('name') border-red-500 @enderror"
+                           value="{{ old('name', $user->name) }}">
+                    @error('name') <p class="input-error">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="input-label">Email</label>
+                    <input type="email" name="email" class="input-field @error('email') border-red-500 @enderror"
+                           value="{{ old('email', $user->email) }}">
+                    @error('email') <p class="input-error">{{ $message }}</p> @enderror
+                </div>
+                <div>
+                    <label class="input-label">Role</label>
+                    <select name="role_id" class="select-field">
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>
+                                {{ $role->label }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <label class="input-label">Phone</label>
+                    <input type="text" name="phone" class="input-field"
+                           value="{{ old('phone', $user->phone) }}">
+                </div>
+                <div>
+                    <label class="input-label">Country</label>
+                    <input type="text" name="country" class="input-field"
+                           value="{{ old('country', $user->country) }}">
+                </div>
+                <div>
+                    <label class="input-label">City</label>
+                    <input type="text" name="city" class="input-field"
+                           value="{{ old('city', $user->city) }}">
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="input-label">New Password <span class="text-dark-500">(leave blank to keep same)</span></label>
+                    <input type="password" name="password" class="input-field" placeholder="••••••••">
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="submit" class="btn-primary">Save Changes</button>
+                <a href="{{ route('admin.users.index') }}" class="btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+
+==================================================
+=== FILE: \resources\views\admin\users\index.blade.php ===
+==================================================
+@extends('layouts.admin')
+@section('title', 'Manage Users')
+@section('page_title', 'Users Management')
+@section('page_subtitle', 'Manage all registered users')
+
+@section('content')
+
+{{-- Filters --}}
+<div class="card-premium p-5 mb-6">
+    <form action="{{ route('admin.users.index') }}" method="GET" class="flex flex-wrap gap-3">
+        <input type="text" name="search" placeholder="Search name or email..." class="input-field flex-1 min-w-48" value="{{ request('search') }}">
+        <select name="role" class="select-field w-40">
+            <option value="">All Roles</option>
+            @foreach($roles as $role)
+                <option value="{{ $role->id }}" {{ request('role') == $role->id ? 'selected' : '' }}>{{ $role->label }}</option>
+            @endforeach
+        </select>
+        <select name="status" class="select-field w-36">
+            <option value="">All Status</option>
+            <option value="active"   {{ request('status') === 'active'   ? 'selected' : '' }}>Active</option>
+            <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+        </select>
+        <button type="submit" class="btn-primary py-2.5 px-5 text-sm">Search</button>
+        <a href="{{ route('admin.users.index') }}" class="btn-outline py-2.5 px-5 text-sm">Clear</a>
+    </form>
+</div>
+
+{{-- Table --}}
+<div class="card-premium overflow-hidden">
+    <div class="p-5 border-b border-dark-800 flex items-center justify-between">
+        <h3 class="text-white font-bold">All Users ({{ $users->total() }})</h3>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="table-premium">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Country</th>
+                    <th>Status</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($users as $user)
+                    <tr>
+                        <td>
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white text-sm font-bold">
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                </div>
+                                <div>
+                                    <p class="text-white font-medium text-sm">{{ $user->name }}</p>
+                                    <p class="text-dark-500 text-xs">{{ $user->email }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="{{ $user->role_id === 1 ? 'badge-gold' : ($user->role_id === 2 ? 'badge-blue' : 'badge-green') }} text-xs">
+                                {{ $user->role?->label }}
+                            </span>
+                        </td>
+                        <td class="text-dark-400 text-sm">{{ $user->country ?? '—' }}</td>
+                        <td>
+                            <form action="{{ route('admin.users.toggle', $user) }}" method="POST">
+                                @csrf @method('PATCH')
+                                <button type="submit" class="{{ $user->is_active ? 'badge-green' : 'badge-red' }} text-xs cursor-pointer hover:opacity-80 transition-opacity">
+                                    {{ $user->is_active ? 'Active' : 'Inactive' }}
+                                </button>
+                            </form>
+                        </td>
+                        <td class="text-dark-500 text-xs">{{ $user->created_at->format('M d, Y') }}</td>
+                        <td>
+                            <div class="flex items-center gap-2">
+                                <a href="{{ route('admin.users.edit', $user) }}"
+                                   class="p-1.5 rounded-lg bg-dark-700 hover:bg-primary-500/20 text-dark-400 hover:text-primary-400 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                </a>
+                                @if($user->id !== auth()->id())
+                                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST"
+                                          onsubmit="return confirm('Delete this user?')">
+                                        @csrf @method('DELETE')
+                                        <button type="submit"
+                                                class="p-1.5 rounded-lg bg-dark-700 hover:bg-red-500/20 text-dark-400 hover:text-red-400 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    <div class="p-5 border-t border-dark-800">
+        {{ $users->withQueryString()->links() }}
+    </div>
+</div>
+
+@endsection

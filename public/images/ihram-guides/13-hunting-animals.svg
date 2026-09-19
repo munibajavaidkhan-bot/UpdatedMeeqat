@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" rx="16" fill="#f0fdf4"/>
+  <rect x="1" y="1" width="398" height="298" rx="15" stroke="#bbf7d0" stroke-width="2"/>
+  <text x="200" y="35" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#065f46">Hunting &amp; Killing Animals</text>
+  <!-- Animal (deer) -->
+  <ellipse cx="150" cy="140" rx="50" ry="35" fill="#92400e"/>
+  <circle cx="120" cy="115" r="12" fill="#92400e"/>
+  <circle cx="118" cy="113" r="2" fill="white"/>
+  <path d="M115 105 L105 85 M115 105 L125 85" stroke="#92400e" stroke-width="2" stroke-linecap="round"/>
+  <line x1="110" y1="175" x2="110" y2="200" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+  <line x1="140" y1="175" x2="140" y2="200" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+  <line x1="170" y1="170" x2="170" y2="195" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+  <line x1="190" y1="165" x2="190" y2="190" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+  <!-- Big X -->
+  <line x1="100" y1="80" x2="210" y2="210" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+  <line x1="210" y1="80" x2="100" y2="210" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+  <!-- Note -->
+  <rect x="80" y="240" width="240" height="40" rx="8" fill="white" stroke="#059669" stroke-width="1.5"/>
+  <text x="200" y="258" text-anchor="middle" font-family="Arial" font-size="10" fill="#065f46">Hunting any land animal is forbidden</text>
+  <text x="200" y="272" text-anchor="middle" font-family="Arial" font-size="9" fill="#6b7280">Harmful insects like mosquitoes can be killed</text>
+</svg>

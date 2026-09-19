@@ -1,0 +1,33 @@
+
+==================================================
+=== FILE: \resources\views\niyat\index.blade.php ===
+==================================================
+@extends('layouts.app')
+@section('title', 'Niyat (Intentions)')
+
+@section('content')
+<div class="pt-32 pb-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-black text-white mb-4">Niyat <span class="text-primary-400">(Intentions)</span></h1>
+        <p class="text-dark-400">Find correct intentions for your rituals</p>
+    </div>
+
+    <div class="space-y-12">
+        @foreach($niyats as $type => $group)
+            <div>
+                <h2 class="text-2xl font-bold text-white uppercase tracking-wider mb-6 border-b border-dark-800 pb-2">{{ $type }}</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    @foreach($group as $niyat)
+                        <div class="card-premium p-6">
+                            <h3 class="text-lg font-bold text-white mb-4">{{ $niyat->title_en }}</h3>
+                            <p class="arabic text-2xl text-gold-400 text-right mb-4">{{ $niyat->arabic_text }}</p>
+                            <p class="text-white italic mb-2">{{ $niyat->transliteration }}</p>
+                            <p class="text-dark-400 text-sm">{{ $niyat->translation_en }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+@endsection

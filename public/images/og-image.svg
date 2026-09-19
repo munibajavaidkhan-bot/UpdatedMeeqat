@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="og-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064E3B"/>
+      <stop offset="50%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#og-bg)"/>
+  <rect x="0" y="0" width="1200" height="630" fill="none" stroke="#059669" stroke-width="2" opacity="0.3"/>
+  <!-- Grid pattern -->
+  <g opacity="0.05" stroke="#fff" stroke-width="1">
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="500" x2="1200" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="630"/>
+    <line x1="400" y1="0" x2="400" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="800" y1="0" x2="800" y2="630"/>
+    <line x1="1000" y1="0" x2="1000" y2="630"/>
+  </g>
+  <!-- Logo -->
+  <rect x="540" y="170" width="120" height="120" rx="24" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  <text x="600" y="258" text-anchor="middle" fill="#34d399" font-family="system-ui" font-weight="900" font-size="64">M</text>
+  <!-- Title -->
+  <text x="600" y="340" text-anchor="middle" fill="#ffffff" font-family="system-ui" font-weight="800" font-size="48" letter-spacing="-1">Meeqat.io</text>
+  <text x="600" y="390" text-anchor="middle" fill="#34d399" font-family="system-ui" font-weight="600" font-size="28" letter-spacing="-0.5">Smart Hajj &amp; Umrah Companion</text>
+  <!-- Features -->
+  <g transform="translate(200, 440)">
+    <rect x="0" y="0" width="200" height="40" rx="8" fill="rgba(5,150,105,0.15)" stroke="rgba(5,150,105,0.3)"/>
+    <text x="100" y="26" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="16" font-weight="600">Chaddar Calculator</text>
+  </g>
+  <g transform="translate(420, 440)">
+    <rect x="0" y="0" width="200" height="40" rx="8" fill="rgba(5,150,105,0.15)" stroke="rgba(5,150,105,0.3)"/>
+    <text x="100" y="26" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="16" font-weight="600">Meeqat Finder</text>
+  </g>
+  <g transform="translate(640, 440)">
+    <rect x="0" y="0" width="200" height="40" rx="8" fill="rgba(5,150,105,0.15)" stroke="rgba(5,150,105,0.3)"/>
+    <text x="100" y="26" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="16" font-weight="600">Duas Library</text>
+  </g>
+  <g transform="translate(860, 440)">
+    <rect x="0" y="0" width="200" height="40" rx="8" fill="rgba(5,150,105,0.15)" stroke="rgba(5,150,105,0.3)"/>
+    <text x="100" y="26" text-anchor="middle" fill="#6ee7b7" font-family="system-ui" font-size="16" font-weight="600">Ihram Guide</text>
+  </g>
+  <!-- Bottom text -->
+  <text x="600" y="550" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="system-ui" font-size="16">Free • Always • For Every Pilgrim</text>
+  <!-- Decorative orbs -->
+  <circle cx="100" cy="100" r="150" fill="rgba(5,150,105,0.1)" />
+  <circle cx="1100" cy="530" r="150" fill="rgba(217,119,6,0.08)" />
+</svg>

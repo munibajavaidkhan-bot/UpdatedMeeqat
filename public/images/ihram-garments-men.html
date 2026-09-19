@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ihram Garments for Men</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+        .figure {
+            width: 280px;
+            height: 400px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        /* Head */
+        .head {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #d4a574 0%, #c9956a 100%);
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            position: relative;
+            z-index: 2;
+        }
+        /* Upper body with Rida (upper garment) */
+        .upper-body {
+            width: 140px;
+            height: 150px;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e5e7eb;
+        }
+        .upper-body::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -20px;
+            width: 60px;
+            height: 120px;
+            background: white;
+            border-radius: 10px;
+            transform: rotate(15deg);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e5e7eb;
+        }
+        /* Lower body with Izar (lower garment) */
+        .lower-body {
+            width: 160px;
+            height: 180px;
+            background: white;
+            border-radius: 0 0 20px 20px;
+            margin: 0 auto;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #e5e7eb;
+            border-top: none;
+        }
+        .lower-body::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 20px;
+            background: linear-gradient(to right, transparent, rgba(0,0,0,0.05), transparent);
+        }
+        /* Arms */
+        .arm-left, .arm-right {
+            width: 30px;
+            height: 100px;
+            background: linear-gradient(135deg, #d4a574 0%, #c9956a 100%);
+            position: absolute;
+            top: 80px;
+            border-radius: 15px;
+        }
+        .arm-left { left: 20px; }
+        .arm-right { right: 20px; }
+        /* Fold lines on garments */
+        .fold-line {
+            position: absolute;
+            background: rgba(0,0,0,0.05);
+            border-radius: 2px;
+        }
+        .fold-1 { width: 2px; height: 40px; top: 40px; left: 50px; transform: rotate(5deg); }
+        .fold-2 { width: 2px; height: 35px; top: 50px; left: 70px; transform: rotate(-3deg); }
+        .fold-3 { width: 2px; height: 50px; top: 20px; left: 60px; transform: rotate(2deg); }
+        .fold-4 { width: 80px; height: 2px; top: 100px; left: 40px; }
+        /* Labels */
+        .labels {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+        .label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #374151;
+            font-weight: 600;
+        }
+        .label-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #059669;
+        }
+        .label-dot.upper { background: white; }
+        .label-dot.lower { background: white; }
+        h1 {
+            font-size: 24px;
+            color: #065f46;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        p {
+            color: #6b7280;
+            font-size: 14px;
+            max-width: 400px;
+            margin: 0 auto 20px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ihram Garments for Men</h1>
+        <p>Two simple white unstitched cloths worn during Hajj and Umrah pilgrimage</p>
+        
+        <div class="figure">
+            <div class="head"></div>
+            <div class="upper-body">
+                <div class="fold-line fold-1"></div>
+                <div class="fold-line fold-2"></div>
+            </div>
+            <div class="arm-left"></div>
+            <div class="arm-right"></div>
+            <div class="lower-body">
+                <div class="fold-line fold-3"></div>
+                <div class="fold-line fold-4"></div>
+            </div>
+        </div>
+        
+        <div class="labels">
+            <div class="label">
+                <div class="label-dot upper"></div>
+                <span>Rida (Upper)</span>
+            </div>
+            <div class="label">
+                <div class="label-dot lower"></div>
+                <span>Izar (Lower)</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

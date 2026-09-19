@@ -1,0 +1,152 @@
+
+==================================================
+=== FILE: \resources\views\duas\index.blade.php ===
+==================================================
+@extends('layouts.app')
+@section('title', 'Duas Library')
+
+@section('content')
+<div class="relative pt-32 pb-20 overflow-hidden">
+    <div class="absolute inset-0 bg-mesh"></div>
+    <div class="absolute top-20 left-1/4 w-80 h-80 bg-primary-500/8 rounded-full blur-3xl"></div>
+    <div class="absolute top-20 right-1/4 w-80 h-80 bg-gold-500/6 rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {{-- Header --}}
+        <div class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-black text-white mb-3">🤲 Hajj & Umrah <span class="gradient-text">Duas</span></h1>
+            <p class="text-dark-400 max-w-xl mx-auto">Authentic duas with Arabic text, translation, and Urdu translation for your spiritual journey.</p>
+        </div>
+
+        {{-- Search + Filter --}}
+        <div class="max-w-3xl mx-auto mb-10">
+            <form action="{{ route('duas.index') }}" method="GET" class="flex flex-col sm:flex-row gap-3">
+                <div class="flex-1 relative">
+                    <input type="text" name="search" placeholder="Search duas (English or Urdu)..." class="input-field w-full pl-10" value="{{ request('search') }}">
+                    <svg class="w-4 h-4 text-dark-500 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+                @if(request('category'))
+                    <input type="hidden" name="category" value="{{ request('category') }}">
+                @endif
+                <button type="submit" class="btn-primary">Search</button>
+                @if(request('search'))
+                    <a href="{{ route('duas.index') }}" class="btn-outline">Clear</a>
+                @endif
+            </form>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            {{-- Categories Sidebar --}}
+            <div class="lg:w-72 flex-shrink-0">
+                <div class="card-premium p-5 sticky top-24">
+                    <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+                        <span class="w-1 h-5 bg-primary-500 rounded-full"></span>
+                        Categories
+                    </h3>
+                    <div class="space-y-1.5">
+                        <a href="{{ route('duas.index') }}" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ !request('category') ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30' : 'text-dark-400 hover:text-white hover:bg-dark-800' }}">
+                            <span>📖</span> All Duas <span class="ml-auto text-xs opacity-60">({{ $duas->total() }})</span>
+                        </a>
+                        @foreach($categories as $cat)
+                            <a href="{{ route('duas.index', ['category' => $cat->id]) }}" class="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 {{ request('category') == $cat->id ? 'bg-primary-500/20 text-primary-400 border border-primary-500/30' : 'text-dark-400 hover:text-white hover:bg-dark-800' }}">
+                                <span>{{ $cat->icon }}</span> {{ $cat->name_en }} <span class="ml-auto text-xs opacity-60">({{ $cat->duas_count }})</span>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            {{-- Duas Grid --}}
+            <div class="flex-1 min-w-0">
+                @if($duas->count() > 0)
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                        @foreach($duas as $dua)
+                            <a href="{{ route('duas.show', $dua->id) }}" class="card-premium p-5 hover:-translate-y-1.5 hover:border-primary-500/30 transition-all duration-300 group block">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-xs px-2.5 py-1 rounded-full bg-primary-500/10 text-primary-400 border border-primary-500/20">{{ $dua->category->name_en }}</span>
+                                    @if($dua->is_featured)
+                                        <span class="text-xs px-2.5 py-1 rounded-full bg-gold-500/10 text-gold-400 border border-gold-500/20">Featured</span>
+                                    @endif
+                                </div>
+                                <h3 class="text-white font-bold text-sm mb-3 line-clamp-2 group-hover:text-primary-400 transition-colors">{{ $dua->title_en }}</h3>
+                                <p class="arabic text-xl text-gold-400/90 mb-3 line-clamp-2 leading-loose">{{ $dua->arabic_text }}</p>
+                                <p class="text-dark-400 text-xs line-clamp-2">{{ $dua->translation_en }}</p>
+                                @if($dua->translation_ur)
+                                    <p class="text-dark-500 text-xs mt-2 line-clamp-1 border-t border-dark-800 pt-2">{{ $dua->translation_ur }}</p>
+                                @endif
+                                <div class="mt-3 flex items-center gap-2 text-dark-600 text-xs">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                    Read full dua
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                    <div class="mt-8">{{ $duas->links() }}</div>
+                @else
+                    <div class="card-premium p-12 text-center">
+                        <div class="text-5xl mb-4">🔍</div>
+                        <h3 class="text-white font-bold text-lg mb-2">No Duas Found</h3>
+                        <p class="text-dark-400 text-sm">Try a different search term or category.</p>
+                        <a href="{{ route('duas.index') }}" class="btn-primary mt-4 inline-block">View All Duas</a>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+
+==================================================
+=== FILE: \resources\views\duas\show.blade.php ===
+==================================================
+@extends('layouts.app')
+@section('title', $dua->title_en)
+
+@section('content')
+<div class="pt-32 pb-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <a href="{{ route('duas.index') }}" class="text-primary-400 hover:underline mb-6 inline-block">&larr; Back to Library</a>
+    
+    <div class="card-premium p-8 md:p-12 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-gold-500/10 rounded-full blur-3xl"></div>
+        
+        <div class="flex justify-between items-start mb-8 relative z-10">
+            <span class="badge-green">{{ $dua->category->name_en }}</span>
+            <form action="{{ route('duas.bookmark', $dua->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="p-2 rounded-full {{ $isBookmarked ? 'bg-gold-500 text-white' : 'bg-dark-800 text-dark-300' }} hover:scale-110 transition">
+                    ⭐
+                </button>
+            </form>
+        </div>
+
+        <h1 class="text-3xl font-black text-white mb-8 relative z-10">{{ $dua->title_en }}</h1>
+        
+        <div class="bg-dark-900/50 p-6 rounded-2xl border border-dark-700 mb-8 relative z-10">
+            <p class="arabic text-3xl md:text-5xl text-gold-400 leading-relaxed text-right mb-6">{{ $dua->arabic_text }}</p>
+        </div>
+
+        <div class="space-y-6 relative z-10">
+            <div>
+                <h3 class="text-primary-400 font-bold mb-2">Transliteration</h3>
+                <p class="text-white text-lg italic">{{ $dua->transliteration }}</p>
+            </div>
+            <div>
+                <h3 class="text-primary-400 font-bold mb-2">English Translation</h3>
+                <p class="text-dark-300">{{ $dua->translation_en }}</p>
+            </div>
+            @if($dua->translation_ur)
+                <div>
+                    <h3 class="text-gold-400 font-bold mb-2">اردو ترجمہ</h3>
+                    <p class="text-dark-300 text-lg leading-loose" style="direction: rtl; text-align: right;">{{ $dua->translation_ur }}</p>
+                </div>
+            @endif
+            @if($dua->reference)
+                <div class="pt-4 border-t border-dark-800">
+                    <p class="text-dark-500 text-sm">Reference: {{ $dua->reference }}</p>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+@endsection

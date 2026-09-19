@@ -1,0 +1,4 @@
+﻿HTTP 200
+new model slug:    True
+fallback model:    True
+old provider gone: False

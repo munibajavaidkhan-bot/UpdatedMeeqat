@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" rx="16" fill="#f0fdf4"/>
+  <rect x="1" y="1" width="398" height="298" rx="15" stroke="#bbf7d0" stroke-width="2"/>
+  <text x="200" y="35" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#065f46">Patience &amp; Good Manners</text>
+  <!-- Two people shaking hands -->
+  <circle cx="140" cy="100" r="18" fill="#d4a574"/>
+  <path d="M122 120 L122 170 Q122 180 132 180 L148 180 Q158 180 158 170 L158 120" fill="white" stroke="#d1d5db" stroke-width="1.5"/>
+  <circle cx="260" cy="100" r="18" fill="#d4a574"/>
+  <path d="M242 120 L242 170 Q242 180 252 180 L268 180 Q278 180 278 170 L278 120" fill="white" stroke="#d1d5db" stroke-width="1.5"/>
+  <!-- Handshake -->
+  <path d="M158 145 L242 145" stroke="#059669" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="200" cy="145" r="8" fill="#059669"/>
+  <!-- Smile -->
+  <path d="M180 120 Q200 140 220 120" stroke="#059669" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Virtues -->
+  <rect x="60" y="200" width="280" height="70" rx="8" fill="white" stroke="#059669" stroke-width="1.5"/>
+  <text x="200" y="220" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#065f46">Show These Virtues</text>
+  <text x="120" y="245" text-anchor="middle" font-family="Arial" font-size="10" fill="#374151">😊 Kindness</text>
+  <text x="200" y="245" text-anchor="middle" font-family="Arial" font-size="10" fill="#374151">🤝 Respect</text>
+  <text x="280" y="245" text-anchor="middle" font-family="Arial" font-size="10" fill="#374151">💪 Help Others</text>
+</svg>

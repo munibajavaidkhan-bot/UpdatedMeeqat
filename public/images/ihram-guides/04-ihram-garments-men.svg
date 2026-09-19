@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" rx="16" fill="#f0fdf4"/>
+  <rect x="1" y="1" width="398" height="298" rx="15" stroke="#bbf7d0" stroke-width="2"/>
+  <!-- Title -->
+  <text x="200" y="35" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#065f46">Ihram Garments for Men</text>
+  <!-- Person with Ihram -->
+  <circle cx="150" cy="75" r="18" fill="#d4a574"/>
+  <!-- Rida (upper) -->
+  <path d="M120 95 L120 170 Q120 180 130 180 L170 180 Q180 180 180 170 L180 95 Q180 85 170 85 L130 85 Q120 85 120 95Z" fill="white" stroke="#d1d5db" stroke-width="1.5"/>
+  <line x1="150" y1="95" x2="150" y2="170" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4"/>
+  <!-- Izar (lower) -->
+  <path d="M115 175 L115 250 Q115 260 125 260 L175 260 Q185 260 185 250 L185 175 Q185 170 175 170 L125 170 Q115 170 115 175Z" fill="white" stroke="#d1d5db" stroke-width="1.5"/>
+  <line x1="150" y1="175" x2="150" y2="250" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4"/>
+  <!-- Labels -->
+  <line x1="185" y1="130" x2="240" y2="110" stroke="#059669" stroke-width="1.5"/>
+  <rect x="240" y="100" width="120" height="25" rx="6" fill="white" stroke="#059669" stroke-width="1.5"/>
+  <text x="300" y="117" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#065f46">Rida (Upper)</text>
+  <line x1="185" y1="210" x2="240" y2="200" stroke="#059669" stroke-width="1.5"/>
+  <rect x="240" y="190" width="120" height="25" rx="6" fill="white" stroke="#059669" stroke-width="1.5"/>
+  <text x="300" y="207" text-anchor="middle" font-family="Arial" font-size="11" font-weight="bold" fill="#065f46">Izar (Lower)</text>
+  <!-- Note -->
+  <rect x="100" y="270" width="200" height="20" rx="4" fill="#dcfce7"/>
+  <text x="200" y="284" text-anchor="middle" font-family="Arial" font-size="10" fill="#065f46">Two unstitched white cloths</text>
+</svg>

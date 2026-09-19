@@ -1,0 +1,283 @@
+
+==================================================
+=== FILE: \resources\views\guides\ihram-show.blade.php ===
+==================================================
+@extends('layouts.app')
+@section('title', $guide->title_en)
+
+@section('content')
+
+<div class="relative pt-32 pb-20">
+    <div class="absolute inset-0 bg-mesh"></div>
+    <div class="absolute top-20 right-1/4 w-80 h-80 bg-gold-500/6 rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <a href="{{ route('ihram.index') }}" class="inline-flex items-center gap-2 text-dark-400 hover:text-primary-400 text-sm mb-8 transition-colors group">
+            <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Ihram Guide
+        </a>
+
+        {{-- Main Card --}}
+        <div class="card-premium overflow-hidden mb-8">
+            <div class="h-1 bg-gradient-to-r from-gold-500 via-primary-500 to-gold-500"></div>
+
+            <div class="p-8 md:p-12">
+                {{-- Category Badge --}}
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="badge bg-gradient-to-br {{ $guide->category_color }} border text-sm px-4 py-1.5">
+                        {{ $guide->category_label }}
+                    </span>
+                </div>
+
+                {{-- Icon + Title --}}
+                <div class="flex items-start gap-5 mb-8">
+                    <div class="text-6xl flex-shrink-0 animate-float">{{ $guide->icon }}</div>
+                    <div>
+                        <h1 class="text-3xl font-black text-white mb-2">{{ $guide->title_en }}</h1>
+                        @if($guide->title_ur)
+                            <p class="urdu text-gold-400 text-xl">{{ $guide->title_ur }}</p>
+                        @endif
+                    </div>
+                </div>
+
+                {{-- English Content --}}
+                <div class="card p-6 mb-6">
+                    <h3 class="text-primary-400 font-bold mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
+                        English
+                    </h3>
+                    <p class="text-dark-200 leading-relaxed text-lg">{{ $guide->content_en }}</p>
+                </div>
+
+                {{-- Urdu Content --}}
+                @if($guide->content_ur)
+                    <div class="card p-6">
+                        <h3 class="text-gold-400 font-bold mb-3 flex items-center justify-end gap-2">
+                            اردو
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/></svg>
+                        </h3>
+                        <p class="urdu text-dark-200 text-xl leading-loose text-right">{{ $guide->content_ur }}</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+
+        {{-- Related Guides --}}
+        @if($related->count() > 0)
+            <div>
+                <h3 class="text-white font-bold text-xl mb-5 flex items-center gap-2">
+                    <span class="w-1 h-5 bg-primary-500 rounded-full"></span>
+                    More {{ ucfirst($guide->category) }} Rules
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    @foreach($related as $rel)
+                        <a href="{{ route('ihram.show', $rel->id) }}"
+                           class="card p-5 hover:border-dark-700 hover:-translate-y-1 transition-all duration-300 group">
+                            <div class="text-3xl mb-3 group-hover:scale-110 transition-transform">{{ $rel->icon }}</div>
+                            <h4 class="text-white font-semibold mb-2 group-hover:text-primary-300 transition-colors">{{ $rel->title_en }}</h4>
+                            <p class="text-dark-500 text-xs line-clamp-2">{{ $rel->content_en }}</p>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        {{-- Action Buttons --}}
+        <div class="flex flex-wrap gap-3 mt-8">
+            <a href="{{ route('ihram.index') }}" class="btn-outline text-sm py-2.5 px-5">
+                ← All Rules
+            </a>
+            <a href="{{ route('ihram.index', ['filter' => $guide->category]) }}" class="btn-outline text-sm py-2.5 px-5">
+                {{ $guide->category_label }} Rules
+            </a>
+            <a href="{{ route('niyat.index') }}" class="btn-primary text-sm py-2.5 px-5">
+                🤲 View Niyat
+            </a>
+        </div>
+
+    </div>
+</div>
+
+@endsection
+
+==================================================
+=== FILE: \resources\views\guides\ihram.blade.php ===
+==================================================
+@extends('layouts.app')
+@section('title', 'Ihram Rules Visual Guide')
+
+@section('content')
+
+{{-- Page Header --}}
+<div class="relative pt-32 pb-16 overflow-hidden">
+    <div class="absolute inset-0 bg-mesh"></div>
+    <div class="absolute top-20 left-1/4 w-80 h-80 bg-gold-500/8 rounded-full blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3 text-dark-500 text-sm mb-6">
+            <a href="{{ route('home') }}" class="hover:text-primary-400">Home</a>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <span class="text-primary-400">Ihram Guide</span>
+        </div>
+
+        <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center text-2xl">📖</div>
+            <div>
+                <h1 class="text-3xl md:text-4xl font-black text-white">Ihram Rules <span class="gradient-text">Visual Guide</span></h1>
+                <p class="text-dark-400 mt-1">Complete guide with rules for men, women, prohibited & recommended acts</p>
+            </div>
+        </div>
+
+        {{-- Stats Bar --}}
+        <div class="flex flex-wrap gap-3">
+            @foreach([
+                ['general', '📋', 'General', 'badge-green'],
+                ['men', '👨', 'Men', 'badge-blue'],
+                ['women', '👩', 'badge bg-pink-500/20 text-pink-400 border border-pink-500/30', 'Women'],
+                ['prohibited', '🚫', 'Prohibited', 'badge-red'],
+                ['recommended', '⭐', 'Recommended', 'badge-gold'],
+            ] as $cat)
+                <span class="badge bg-dark-800 border border-dark-700 text-dark-300">
+                    {{ $cat[1] }} {{ $cat[0] }}: {{ $counts[$cat[0]] ?? 0 }} rules
+                </span>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+
+    {{-- Filter Tabs --}}
+    <div class="flex flex-wrap gap-2 mb-10 p-1.5 bg-dark-900 border border-dark-800 rounded-2xl w-fit">
+        @php
+        $filters = [
+            ['all',         '🌐', 'All Rules'],
+            ['general',     '📋', 'General'],
+            ['men',         '👨', 'Men'],
+            ['women',       '👩', 'Women'],
+            ['prohibited',  '🚫', 'Prohibited'],
+            ['recommended', '⭐', 'Recommended'],
+        ];
+        @endphp
+        @foreach($filters as $filter)
+            <a
+                href="{{ route('ihram.index', ['filter' => $filter[0]]) }}"
+                class="px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 flex items-center gap-2
+                {{ $activeFilter === $filter[0]
+                    ? 'bg-primary-500 text-white shadow-glow-green'
+                    : 'text-dark-400 hover:text-white hover:bg-dark-800' }}"
+            >
+                {{ $filter[1] }} {{ $filter[2] }}
+                @if($filter[0] !== 'all' && isset($counts[$filter[0]]))
+                    <span class="text-xs opacity-70">({{ $counts[$filter[0]] }})</span>
+                @endif
+            </a>
+        @endforeach
+    </div>
+
+    {{-- Guides Display --}}
+    @if($activeFilter === 'all')
+        {{-- Show grouped by category --}}
+        @foreach($allGuides as $categoryName => $categoryGuides)
+            @php
+                $sample = $categoryGuides->first();
+                $labels = ['men' => '👨 Men Rules', 'women' => '👩 Women Rules', 'general' => '📋 General Rules', 'prohibited' => '🚫 Prohibited Acts', 'recommended' => '⭐ Recommended Acts'];
+            @endphp
+            <div class="mb-14">
+                {{-- Category Header --}}
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-black text-white flex items-center gap-3">
+                        <span class="w-1.5 h-8 bg-primary-500 rounded-full"></span>
+                        {{ $labels[$categoryName] ?? $categoryName }}
+                    </h2>
+                    <a href="{{ route('ihram.index', ['filter' => $categoryName]) }}"
+                       class="text-primary-400 text-sm hover:underline">
+                        View all {{ $categoryGuides->count() }} →
+                    </a>
+                </div>
+
+                {{-- Cards --}}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    @foreach($categoryGuides as $guide)
+                        <div class="group relative card overflow-hidden border bg-gradient-to-br {{ $guide->category_color }} transition-all duration-300 hover:-translate-y-2 hover:shadow-premium">
+                            <div class="p-6">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="text-4xl group-hover:scale-110 transition-transform duration-300">
+                                        {{ $guide->icon }}
+                                    </div>
+                                    <span class="badge text-xs bg-dark-800/50 border border-dark-700 text-dark-300">
+                                        {{ $guide->category_label }}
+                                    </span>
+                                </div>
+
+                                <h3 class="text-white font-bold text-lg mb-3">{{ $guide->title_en }}</h3>
+                                <p class="text-dark-400 text-sm leading-relaxed line-clamp-3 mb-4">{{ $guide->content_en }}</p>
+
+                                @if($guide->title_ur)
+                                    <p class="urdu text-dark-500 text-sm leading-loose line-clamp-2 mb-4">{{ $guide->title_ur }}</p>
+                                @endif
+
+                                <a href="{{ route('ihram.show', $guide->id) }}"
+                                   class="flex items-center gap-2 text-sm font-semibold text-primary-400 hover:text-primary-300 group-hover:gap-3 transition-all duration-300">
+                                    Read Full Rule
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endforeach
+
+    @else
+        {{-- Filtered View --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            @foreach($filteredGuides as $guide)
+                <div class="group card overflow-hidden border bg-gradient-to-br {{ $guide->category_color }} transition-all duration-300 hover:-translate-y-2 hover:shadow-premium">
+                    <div class="p-6">
+                        <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                            {{ $guide->icon }}
+                        </div>
+                        <h3 class="text-white font-bold text-lg mb-3">{{ $guide->title_en }}</h3>
+                        <p class="text-dark-400 text-sm leading-relaxed mb-4">{{ $guide->content_en }}</p>
+
+                        @if($guide->title_ur)
+                            <p class="urdu text-dark-500 text-sm leading-loose mb-4">{{ $guide->title_ur }}</p>
+                        @endif
+
+                        <a href="{{ route('ihram.show', $guide->id) }}"
+                           class="flex items-center gap-2 text-sm font-semibold text-primary-400 hover:text-primary-300 group-hover:gap-3 transition-all duration-300">
+                            Read Full Rule
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+    {{-- Bottom CTA --}}
+    <div class="mt-16 relative rounded-3xl overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-primary-900/60 via-dark-900 to-dark-900"></div>
+        <div class="absolute top-0 right-0 w-72 h-72 bg-gold-500/10 rounded-full blur-3xl"></div>
+        <div class="relative p-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <h3 class="text-3xl font-black text-white mb-2">Ready for Your Ihram? 🕌</h3>
+                <p class="text-dark-400 max-w-md">Read all rules carefully. Check Meeqat distance and prepare your duas before entering the sacred state.</p>
+            </div>
+            <div class="flex gap-3 flex-shrink-0">
+                <a href="{{ route('meeqat.finder') }}" class="btn-outline py-3 px-6">📍 Meeqat Finder</a>
+                <a href="{{ route('niyat.index') }}" class="btn-primary py-3 px-6">🤲 View Niyat</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection

@@ -1,0 +1,6 @@
+﻿HTTP 200
+puter.js script:  True
+demo card:        True
+puter methods:    True
+prompt route:     True
+footer powered:   True

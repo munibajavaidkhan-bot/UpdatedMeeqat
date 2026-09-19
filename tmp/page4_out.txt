@@ -1,0 +1,6 @@
+﻿HTTP 200
+helper:        True
+person/cap:    True
+new inputs:    True
+old inputs gone: True
+model slug:    True

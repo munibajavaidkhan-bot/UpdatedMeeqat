@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" rx="16" fill="#f0fdf4"/>
+  <rect x="1" y="1" width="398" height="298" rx="15" stroke="#bbf7d0" stroke-width="2"/>
+  <!-- Kaaba -->
+  <rect x="150" y="80" width="100" height="100" rx="4" fill="#1e293b"/>
+  <rect x="155" y="85" width="90" height="90" rx="2" fill="#0f172a"/>
+  <rect x="170" y="100" width="60" height="40" rx="2" fill="#059669" opacity="0.3"/>
+  <line x1="200" y1="80" x2="200" y2="180" stroke="#d4af37" stroke-width="3"/>
+  <line x1="150" y1="140" x2="250" y2="140" stroke="#d4af37" stroke-width="2"/>
+  <!-- Person -->
+  <circle cx="320" cy="110" r="15" fill="#d4a574"/>
+  <rect x="305" y="125" width="30" height="50" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1.5"/>
+  <rect x="300" y="175" width="40" height="40" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1.5"/>
+  <!-- Arrow -->
+  <path d="M260 130 L290 130" stroke="#059669" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M285 125 L295 130 L285 135" stroke="#059669" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Text -->
+  <text x="200" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#065f46">What is Ihram?</text>
+  <text x="200" y="275" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">Sacred state before Hajj/Umrah</text>
+</svg>

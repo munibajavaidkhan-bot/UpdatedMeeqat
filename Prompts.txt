@@ -1,0 +1,571 @@
+Generate a complete project plan for a Coffee Shop Landing Page with a modern, professional, and responsive design.
+
+Please include the following details:
+
+Project Goal
+Project Overview
+Project Features
+Technologies Used (HTML5, CSS3, JavaScript, Bootstrap 5)
+Folder Structure
+Application Flow
+Key Sections of the Landing Page
+Key Features
+Color Theme (modern coffee-inspired palette)
+Typography
+Image Requirements (hero banner, coffee products, café interior, icons, background images)
+Animations (smooth scrolling, hover effects, fade-in animations, button animations, card transitions, navbar effects)
+Responsive Design Requirements
+UI/UX Guidelines
+Icons and Assets
+Best Practices for clean, maintainable, and semantic code.
+
+The design should look premium, modern, elegant, visually appealing, and fully responsive with smooth animations and a professional user experience. The landing page should follow current UI/UX trends and be suitable as a portfolio-quality frontend project.
+
+Coffee Shop Landing Page – Complete Project Plan
+Project Title
+
+Brew Haven – Modern Coffee Shop Landing Page
+
+Project Goal
+
+Design and develop a modern, premium, and fully responsive Coffee Shop Landing Page that provides an engaging user experience while showcasing the café's brand, menu, signature drinks, customer reviews, and contact information.
+
+The project should demonstrate strong frontend development skills using HTML5, CSS3, JavaScript, and Bootstrap 5, with clean architecture, reusable components, smooth animations, and responsive layouts suitable for a professional portfolio.
+
+Project Overview
+
+The Coffee Shop Landing Page is a single-page responsive website designed to promote a modern coffee brand. It focuses on elegant visuals, smooth user interactions, and a conversion-oriented layout that encourages users to explore the menu, visit the café, or place an order.
+
+The landing page combines premium design aesthetics with modern frontend development practices to create a visually attractive and highly interactive website.
+
+Project Features
+Fully Responsive Design
+Modern Hero Section
+Sticky Navigation Bar
+Smooth Scroll Navigation
+Animated Hero Content
+Featured Coffee Products
+About the Coffee Shop
+Why Choose Us Section
+Popular Menu Items
+Special Offers
+Customer Testimonials
+Gallery Section
+Statistics Counter
+FAQ Accordion
+Newsletter Subscription
+Contact Information
+Google Maps Integration
+Social Media Links
+Elegant Footer
+Scroll-to-Top Button
+Loading Animation
+Dark Coffee Inspired Theme
+Smooth Page Animations
+Technologies Used
+Frontend
+HTML5
+CSS3
+Bootstrap 5
+JavaScript (ES6)
+Libraries
+Bootstrap Icons
+Font Awesome
+AOS (Animate On Scroll)
+Google Fonts
+Swiper.js (Testimonials Slider)
+GLightbox (Gallery Lightbox)
+Optional
+EmailJS (Contact Form)
+Vanilla Tilt.js
+CountUp.js
+Project Folder Structure
+coffee-shop/
+
+│
+
+├── index.html
+
+│
+
+├── css/
+
+│      style.css
+│      responsive.css
+│      animations.css
+
+│
+
+├── js/
+
+│      script.js
+│      navbar.js
+│      slider.js
+│      counter.js
+
+│
+
+├── assets/
+
+│      images/
+│      icons/
+│      logo/
+│      backgrounds/
+
+│
+
+├── fonts/
+
+│
+
+├── vendor/
+
+│      aos/
+│      swiper/
+
+│
+
+└── README.md
+Application Flow
+User Opens Website
+
+↓
+
+Loading Animation
+
+↓
+
+Hero Section
+
+↓
+
+About Coffee Shop
+
+↓
+
+Featured Coffee
+
+↓
+
+Why Choose Us
+
+↓
+
+Menu
+
+↓
+
+Special Offer
+
+↓
+
+Gallery
+
+↓
+
+Testimonials
+
+↓
+
+Statistics
+
+↓
+
+FAQ
+
+↓
+
+Newsletter
+
+↓
+
+Contact
+
+↓
+
+Footer
+Landing Page Sections
+1. Hero Section
+
+Content
+
+Premium Coffee Image
+Heading
+Short Description
+CTA Buttons
+Background Overlay
+
+Buttons
+
+Explore Menu
+Order Now
+2. About Us
+
+Include
+
+Story
+Mission
+Experience
+Café Environment
+3. Why Choose Us
+
+Cards
+
+Premium Beans
+Fresh Brewing
+Organic Ingredients
+Fast Service
+4. Featured Coffee
+
+Cards
+
+Cappuccino
+Latte
+Espresso
+Mocha
+Cold Brew
+Americano
+
+Each card includes
+
+Image
+Price
+Rating
+Button
+5. Popular Menu
+
+Categories
+
+Coffee
+Tea
+Desserts
+Sandwiches
+6. Special Offer
+
+Banner
+
+Discount
+
+Countdown Timer (optional)
+
+7. Gallery
+
+Grid Layout
+
+Images
+
+Lightbox
+
+8. Customer Testimonials
+
+Slider
+
+Customer Image
+
+Rating
+
+Review
+
+9. Statistics
+
+Animated Counters
+
+Happy Customers
+Coffee Served
+Years Experience
+Awards
+10. FAQ
+
+Bootstrap Accordion
+
+11. Newsletter
+
+Email Subscription
+
+12. Contact
+
+Include
+
+Address
+Phone
+Email
+Working Hours
+Google Map
+13. Footer
+
+Include
+
+Logo
+Quick Links
+Social Icons
+Copyright
+Key Features
+Sticky Navigation
+Responsive Navigation Menu
+Hero Call-to-Action
+Animated Cards
+Image Hover Effects
+Product Cards
+Interactive Buttons
+Testimonial Slider
+FAQ Accordion
+Scroll Progress
+Back To Top Button
+Lazy Loaded Images
+Responsive Layout
+Smooth Scrolling
+Modern Footer
+Color Theme
+Primary
+#6F4E37
+Coffee Brown
+Secondary
+#C89F7B
+Latte Beige
+Accent
+#D4A373
+Caramel Gold
+Background
+#FFF8F2
+Warm Cream
+Dark
+#2B1D18
+Dark Roast
+Text
+#333333
+White
+#FFFFFF
+Typography
+Primary Font
+
+Poppins
+
+Secondary Font
+
+Playfair Display
+
+Heading
+
+700
+
+Paragraph
+
+400
+
+Buttons
+
+600
+
+Image Requirements
+Hero
+
+Modern coffee cup
+
+Products
+Cappuccino
+Latte
+Espresso
+Cold Brew
+Mocha
+About
+
+Coffee shop interior
+
+Gallery
+Barista
+Café Interior
+Coffee Beans
+Customers
+Coffee Machine
+Backgrounds
+Coffee Texture
+Wooden Table
+Blurred Café
+Icons
+Coffee
+Cup
+Delivery
+WiFi
+Organic
+Award
+Clock
+Phone
+Location
+Animations
+Hero
+
+Fade Up
+
+Navbar
+
+Glass Effect on Scroll
+
+Buttons
+
+Scale
+
+Ripple
+
+Gradient Hover
+
+Cards
+
+Lift Effect
+
+Shadow
+
+Tilt Effect (optional)
+
+Images
+
+Zoom Hover
+
+Testimonials
+
+Slider Animation
+
+Counter
+
+Count Up Animation
+
+Scroll
+
+Smooth Scroll
+
+Sections
+
+Fade Left
+
+Fade Right
+
+Zoom In
+
+Fade Up
+
+Footer
+
+Fade In
+
+Responsive Design Requirements
+Mobile
+
+320px+
+
+Hamburger Menu
+Single Column Layout
+Large Buttons
+Optimized Images
+Tablet
+
+768px+
+
+Two Column Layout
+Responsive Cards
+Laptop
+
+1024px+
+
+Three/Four Columns
+Desktop
+
+1440px+
+
+Full Width Hero
+Maximum Container Width
+Premium Spacing
+UI/UX Guidelines
+Clean Layout
+Minimal Design
+Plenty of White Space
+Clear Visual Hierarchy
+High Contrast
+Accessible Buttons
+Consistent Border Radius
+Modern Cards
+Elegant Shadows
+Premium Hover Effects
+Fast Loading
+Easy Navigation
+Consistent Spacing
+Responsive Typography
+Clear Call-to-Actions
+Icons & Assets
+Icons
+Bootstrap Icons
+Font Awesome
+Fonts
+Google Fonts
+Images
+Unsplash
+Pexels
+Illustrations (Optional)
+Storyset
+unDraw
+JavaScript Features
+Sticky Navbar
+Mobile Menu Toggle
+Active Navigation Highlight
+Scroll Spy
+Scroll To Top
+Smooth Scrolling
+Testimonial Slider
+Counter Animation
+FAQ Toggle
+Gallery Lightbox
+Newsletter Validation
+Contact Form Validation
+Loading Screen
+Theme Toggle (Optional)
+Accessibility
+Semantic HTML5 Elements
+Proper Heading Hierarchy
+ARIA Labels
+Keyboard Navigation
+Focus States
+Alt Text for Images
+Accessible Forms
+Sufficient Color Contrast
+SEO Best Practices
+Semantic HTML
+Meta Title
+Meta Description
+Open Graph Tags
+Descriptive Image Alt Attributes
+Structured Heading Order
+Optimized Images
+Lazy Loading
+Clean URLs
+Favicon
+Coding Best Practices
+HTML
+Semantic Tags
+Organized Structure
+Meaningful Class Names
+Accessible Forms
+CSS
+CSS Variables
+Modular File Organization
+Reusable Utility Classes
+Mobile-First Approach
+Consistent Naming Convention
+Avoid Inline Styles
+JavaScript
+ES6 Syntax
+Modular Functions
+Event Delegation Where Appropriate
+Error Handling
+Clean DOM Manipulation
+Reusable Components
+Expected Learning Outcomes
+
+After completing this project, students will be able to:
+
+Build a professional responsive landing page using HTML5, CSS3, Bootstrap 5, and JavaScript.
+Create clean, semantic, and maintainable frontend code.
+Implement modern UI/UX design principles and responsive layouts.
+Add interactive features such as sticky navigation, smooth scrolling, sliders, counters, accordions, and animations.
+Organize projects using a scalable folder structure.
+Apply frontend best practices for accessibility, performance, and SEO.
+Develop a portfolio-quality project that reflects current web design trends and industry standards.
+
+I want to develop this project with the help of AI. Please create detailed prompts for every module, page, and feature so I can generate the complete project step by step.

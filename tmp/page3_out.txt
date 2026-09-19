@@ -1,0 +1,4 @@
+﻿HTTP 200
+helper:       True
+person/cap:   True
+old inputs gone: False

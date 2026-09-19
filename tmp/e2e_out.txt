@@ -1,0 +1,12 @@
+﻿page OK, csrf token length: 40
+{
+    "success":  true,
+    "prompt":  "Virtual try-on: place the white knitted Kufi prayer cap onto the head of the person in the first image. Match its rounded knitted texture, dome shape, and ribbed rim exactly. Adjust perspective, scale, and tilt to the person\u0027s head angle and pose. Preserve studio-style even lighting with soft shadows and matching colour grading. Keep face, hair below the cap, clothing, pose, and background unchanged. Set the rim naturally on the forehead like a real prayer cap. Do not change framing or add text or watermarks. Output only the edited image.",
+    "source":  "openrouter",
+    "model":  "inclusionai/ling-3.0-flash-vl:free",
+    "conditions":  {
+                       "cap":  "white knitted Kufi prayer cap",
+                       "upload_mode":  "file",
+                       "note":  "Kufi Cap"
+                   }
+}
